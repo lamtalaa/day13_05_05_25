@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang=en>
+  <head>
+    <meta charset=utf-8>
+    <title>Supercenter Mock Server</title>
+    <style type="text/css">
+body {
+  font-family: 'Courier New', Courier, monospace;
+  color: #333;
+}
+
+label {
+  font-weight: bold;
+}
+
+input[type="number"] {
+  width: 50px;
+}
+
+small {
+  color: #666;
+}
+    </style>
+    <script>
+const validate = (statusCode) => {
+  if (statusCode < 200 || statusCode >= 300) {
+    throw Error();
+  }
+};
+
+const api = {
+  getConfig: async () => {
+    const response = await fetch('/admin/config');
+    validate(response.status);
+    return await response.json();
+  },
+
+  updateConfig: async (changes) => {
+    const response = await fetch('/admin/config', { method: 'POST', body: JSON.stringify(changes) });
+    validate(response.status);
+    return await response.json();
+  }
+};
+
+const el = (id) => document.getElementById(id);
+const field = (name) => document.querySelector(`input[name="${name}"]`);
+
+const applyConfig = (config) => {
+  field('catalogSize').value = config.catalogSize;
+  field('catalogSize').max = config.maxCatalogSize;
+  el('displayMaxCatalogSize').innerText = config.maxCatalogSize;
+  field('forceFailure').checked = config.forceFailure;
+  field('simulatedLatency').value = config.simulatedLatency;
+};
+
+const readConfig = () => {
+  return {
+    catalogSize: +(field('catalogSize').value),
+    forceFailure: field('forceFailure').checked,
+    simulatedLatency: +(field('simulatedLatency').value),
+  };
+};
+
+window.loadConfig = async () => {
+  applyConfig(await api.getConfig());
+};
+
+window.updateConfig = async () => {
+  try {
+    await api.updateConfig(readConfig());
+  } catch {
+    alert('Yikes — Failed to update config!');
+  }
+  loadConfig();
+};
+
+window.onload = () => loadConfig();
+    </script>
+  </head>
+  <body>
+    <h1>Supercenter Mock Server</h1>
+
+    <h2>Configuration</h2>
+
+    <p>
+      <label for=config-catalogSize>Catalog Size:</label> 
+      <input id=config-catalogSize name=catalogSize type=number min=0 onchange="updateConfig()">
+      <br>
+      <small>An artificial limit to the number of products to include in the mock catalog. (The maximum value is <span id=displayMaxCatalogSize>…</span> because that's how many mock products there are.)</small>
+    </p>
+    <p>
+      <label for=config-forceFailure>Force Failure:</label> 
+      <input id=config-forceFailure name=forceFailure type=checkbox onchange="updateConfig()">
+      <br>
+      <small>Artificially force api / image responses to be 500 errors instead of regular responses.</small>
+    </p>
+    <p>
+      <label for=config-simulatedLatency>Simulated Latency (ms):</label> 
+      <input id=config-simulatedLatency name=simulatedLatency type=number min=0 step=1000 onchange="updateConfig()">
+      <br>
+      <small>An artificial delay that is added to every api / image response in order to simulate more realistic network conditions.</small>
+    </p>
+  </body>
+</html>

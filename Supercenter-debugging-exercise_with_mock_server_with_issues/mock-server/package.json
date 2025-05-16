@@ -1,0 +1,23 @@
+{
+  "name": "mock-server",
+  "version": "1.0.0",
+  "description": "Mock server for the Supercenter app",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon index.js",
+    "lint": "eslint .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hapi/boom": "7",
+    "@hapi/hapi": "18",
+    "@hapi/inert": "5",
+    "@hapi/joi": "15"
+  },
+  "devDependencies": {
+    "eslint": "6",
+    "nodemon": "1"
+  }
+}

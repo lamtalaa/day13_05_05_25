@@ -1,0 +1,19 @@
+/* 
+  Localizable.strings
+  Supercenter
+
+  Created by Alex Johnson on 7/12/19.
+  Copyright © 2019 Supercenter. All rights reserved.
+*/
+
+"OK" = "OK";
+
+"ProductListTitle" = "Products";
+"ProductListConnectionFailureMessage" = "A connection to the server could not be made.\n\nHint: Is the mock server running?";
+"ProductListConnectionFailureTitle" = "Unable to Connect";
+"ProductListEmptyMessage" = "Sorry, we didn’t find any products.";
+"ProductListEmptyTitle" = "Nothing Found";
+"ProductListErrorCellMessage" = "⚠️ Unable to Load Products";
+"ProductListLoadFailureMessage" = "The request to load products failed.";
+"ProductListLoadFailureTitle" = "Unable to Load Products";
+"ProductListProductCellOutOfStock" = "Out of Stock";
